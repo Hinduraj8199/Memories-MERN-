@@ -1,7 +1,10 @@
 import {
   FETCH_DATA_REQUEST ,
   FETCH_DATA_SUCCESS,
-  FETCH_DATA_FAILURE
+  FETCH_DATA_FAILURE,
+  CREATE_POST_REQUEST,
+  CREATE_POST_SUCCESS,
+  CREATE_POST_FAILURE
 } from "./actionTypes";
 
 const init = {
@@ -31,6 +34,32 @@ export const postReducer = (state = init, { type, payload }) => {
     }
 
     case FETCH_DATA_FAILURE: {
+      return {
+        ...state,
+        isLoading:false,
+        isError:true
+        
+      };
+    }
+
+    case CREATE_POST_REQUEST: {
+      return {
+        ...state,
+        isLoading:true
+       
+      };
+    }
+
+    case CREATE_POST_SUCCESS: {
+      return {
+        ...state,
+        isLoading:false,
+        posts:[...state.posts,payload]
+       
+      };
+    }
+
+    case CREATE_POST_FAILURE: {
       return {
         ...state,
         isLoading:false,

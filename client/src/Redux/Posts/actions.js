@@ -2,7 +2,10 @@ import axios from "axios";
 import {
   FETCH_DATA_REQUEST ,
   FETCH_DATA_SUCCESS,
-  FETCH_DATA_FAILURE
+  FETCH_DATA_FAILURE,
+  CREATE_POST_REQUEST ,
+  CREATE_POST_SUCCESS,
+  CREATE_POST_FAILURE
 } from "./actionTypes";
 
 
@@ -15,27 +18,47 @@ export const fetchPostRequest = () => {
 
 export const fetchPostSuccess = (data) => {
   return {
-    type: FETCH_USER_DATA_SUCCESS,
+    type: FETCH_DATA_SUCCESS,
     payload: data,
   };
 };
 
 export const fetchPostFailure = (err) => {
   return {
-    type: FETCH_USER_DATA_FAILURE,
+    type: FETCH_DATA_FAILURE,
     payload: err,
   };
 };
 
+export const createPostRequest = () => {
+  return {
+    type:   CREATE_POST_REQUEST ,
+    
+  };
+};
+
+export const createPostSuccess = (data) => {
+  return {
+    type:   CREATE_POST_SUCCESS ,
+    payload: data,
+  };
+};
+
+export const createPostFailure = (err) => {
+  return {
+    type: CREATE_POST_FAILURE,
+    payload: err,
+  };
+};
 //functions
-const url = "http://localhost:500/posts"
+const url = "http://localhost:5000/posts"
 export const fetchposts = () => (dispatch) => {
   dispatch(fetchPostRequest());
   return axios
     .get(url)
     .then((res) => {
       console.log(res);
-      dispatch(fetchPostSuccess());
+      dispatch(fetchPostSuccess(res.data));
     })
     .catch((err) => {
       dispatch(fetchPostFailure(err));
@@ -43,21 +66,16 @@ export const fetchposts = () => (dispatch) => {
     });
 };
 
-export const fetchUser = (params) => (dispatch) => {
-  dispatch(fetchUserRequest());
-  console.log(params.username, params.token);
+export const createPost = (post) => (dispatch) => {
+  dispatch(createPostRequest());
   return axios
-    .get(`https://masai-api-mocker.herokuapp.com/user/${params.username}`, {
-      headers: {
-        Authorization: `Bearer ${params.token}`,
-      },
-    })
+    .post(url,post)
     .then((res) => {
-      dispatch(fetchUserSuccess(res.data));
       console.log(res);
+      dispatch(createPostSuccess(res.data));
     })
     .catch((err) => {
-      dispatch(fetchUserFailure(err));
+      dispatch(createPostFailure(err));
       console.log(err);
     });
 };
