@@ -51,7 +51,7 @@ export const createPostFailure = (err) => {
   };
 };
 //functions
-const url = "http://localhost:5000/posts"
+const url = `http://localhost:5000/posts`;
 export const fetchposts = () => (dispatch) => {
   dispatch(fetchPostRequest());
   return axios
@@ -68,10 +68,11 @@ export const fetchposts = () => (dispatch) => {
 
 export const createPost = (post) => (dispatch) => {
   dispatch(createPostRequest());
+  console.log(post)
   return axios
     .post(url,post)
     .then((res) => {
-      console.log(res);
+      console.log(res.data);
       dispatch(createPostSuccess(res.data));
     })
     .catch((err) => {
