@@ -4,7 +4,8 @@ import {
   FETCH_DATA_FAILURE,
   CREATE_POST_REQUEST,
   CREATE_POST_SUCCESS,
-  CREATE_POST_FAILURE
+  CREATE_POST_FAILURE,
+  UPDATE_POST
 } from "./actionTypes";
 
 const init = {
@@ -66,6 +67,13 @@ export const postReducer = (state = init, { type, payload }) => {
         isError:true
         
       };
+    }
+
+    case UPDATE_POST:{
+      return {
+        ...state,
+        posts:state.posts.map((p)=>p._id===payload._id?payload:p)
+      }
     }
 
     default: {

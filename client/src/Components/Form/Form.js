@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useStyles from "./styles"
 import { TextField,Button,Typography,Paper } from "@material-ui/core";
 import FileBase from "react-file-base64";
-import { useDispatch } from "react-redux";
-import { createPost } from "../../Redux/Posts/actions";
+import { useDispatch,useSelector } from "react-redux";
+import { createPost, updatePost } from "../../Redux/Posts/actions";
 
 const initState = {
   creator:"",
@@ -12,25 +12,39 @@ const initState = {
   tags:"",
   selectedFile:""
 }
-const Form = () => {
+const Form = ({currentId,setCurrentId}) => {
   const [postData,setPostData] = React.useState(initState);
   const classes = useStyles();
   const dispatch = useDispatch();
+  const post = useSelector((state)=>(currentId ? state.posts.posts.find((message) => message._id === currentId) : null));
+
 
   const handleSubmit = (e)=>{
     e.preventDefault();
-    console.log(postData)
-    dispatch(createPost(postData));
-    setPostData(initState);
+    console.log(postData);
+    if(currentId){
+      dispatch(updatePost(currentId,postData))
+    }
+    else{
+      dispatch(createPost(postData));
+    }
+    clear();
   }
   const clear = ()=>{
-
+    setCurrentId(null);
+    setPostData(initState);
   }
+
+  useEffect(()=>{
+    if(post){
+      setPostData(post);
+    }
+  },[post])
  
   return (
    <Paper className={classes.paper} >
      <form autoComplete="off" noValidate onSubmit={handleSubmit} className={`${classes.root} ${classes.form}`}>
-        <Typography variant="h6">Craeting a Memory</Typography>
+        <Typography variant="h6">{currentId?"Editing a Memory":"Craeting a Memory"}</Typography>
         <TextField name="creator" variant="outlined" label="Creator" fullWidth value={postData.creator} onChange={(e) => setPostData({ ...postData, creator: e.target.value })} />
         <TextField name="title" variant="outlined" label="Title" fullWidth value={postData.title} onChange={(e) => setPostData({ ...postData, title: e.target.value })} />
         <TextField name="message" variant="outlined" label="Message" fullWidth multiline rows={4} value={postData.message} onChange={(e) => setPostData({ ...postData, message: e.target.value })} />

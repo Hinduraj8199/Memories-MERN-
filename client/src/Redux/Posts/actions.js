@@ -5,7 +5,8 @@ import {
   FETCH_DATA_FAILURE,
   CREATE_POST_REQUEST ,
   CREATE_POST_SUCCESS,
-  CREATE_POST_FAILURE
+  CREATE_POST_FAILURE,
+  UPDATE_POST
 } from "./actionTypes";
 
 
@@ -77,6 +78,20 @@ export const createPost = (post) => (dispatch) => {
     })
     .catch((err) => {
       dispatch(createPostFailure(err));
+      console.log(err);
+    });
+};
+
+
+export const updatePost = (id,post) => (dispatch) => {
+  console.log(id,post)
+  return axios
+    .patch(`http://localhost:5000/posts/${id}`,post)
+    .then((res) => {
+      console.log(res.data);
+      dispatch({type:UPDATE_POST,payload:res.data});
+    })
+    .catch((err) => {
       console.log(err);
     });
 };
