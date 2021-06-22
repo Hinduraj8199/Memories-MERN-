@@ -5,7 +5,9 @@ import {
   CREATE_POST_REQUEST,
   CREATE_POST_SUCCESS,
   CREATE_POST_FAILURE,
-  UPDATE_POST
+  UPDATE_POST,
+  DELETE_POST,
+  LIKE_POST
 } from "./actionTypes";
 
 const init = {
@@ -69,10 +71,18 @@ export const postReducer = (state = init, { type, payload }) => {
       };
     }
 
-    case UPDATE_POST:{
+    case UPDATE_POST:
+    case LIKE_POST: {
       return {
         ...state,
         posts:state.posts.map((p)=>p._id===payload._id?payload:p)
+      }
+    }
+
+    case DELETE_POST:{
+      return {
+        ...state,
+        posts:state.posts.filter((p)=>p._id!==payload)
       }
     }
 

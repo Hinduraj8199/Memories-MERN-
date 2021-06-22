@@ -6,7 +6,9 @@ import {
   CREATE_POST_REQUEST ,
   CREATE_POST_SUCCESS,
   CREATE_POST_FAILURE,
-  UPDATE_POST
+  UPDATE_POST,
+  DELETE_POST,
+  LIKE_POST
 } from "./actionTypes";
 
 
@@ -90,6 +92,25 @@ export const updatePost = (id,post) => (dispatch) => {
     .then((res) => {
       console.log(res.data);
       dispatch({type:UPDATE_POST,payload:res.data});
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export const deletePost = (id) => (dispatch) => {
+  return axios.delete(`http://localhost:5000/posts/${id}`)
+    .then(()=>dispatch({type:DELETE_POST,payload:id}))
+    .catch((err)=>console.log(err));
+};
+
+
+export const likePost = (id) => (dispatch) => {
+  // console.log(id)
+  return axios
+    .patch(`http://localhost:5000/posts/${id}/likePost`)
+    .then((res) => {
+      dispatch({type:LIKE_POST,payload:res.data});
     })
     .catch((err) => {
       console.log(err);
