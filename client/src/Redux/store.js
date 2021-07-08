@@ -1,10 +1,11 @@
 import { applyMiddleware, combineReducers, compose, createStore } from "redux";
+import { authReducer } from "./Auth/authReducer";
 import { postReducer } from "./Posts/postReducer";
 // import { registerReducer } from "./register/registerReducer";
 
 const rootReducer = combineReducers({
   posts: postReducer,
-  // register: registerReducer,
+  auth: authReducer,
 });
 
 const customThunkMiddleware = (store) => (next) => (action) => {
