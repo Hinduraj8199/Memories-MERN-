@@ -10,7 +10,7 @@ const Home = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchposts);
+    dispatch(fetchposts());
   }, [currentId, dispatch]);
   return (
     <Grow in>

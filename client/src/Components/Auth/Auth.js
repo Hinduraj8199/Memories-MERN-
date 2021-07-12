@@ -7,19 +7,30 @@ import {
   Typography,
   Container,
 } from "@material-ui/core";
-import Icon from './Icon';
-import {useHistory} from "react-router-dom";
+import Icon from "./Icon";
+import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { GoogleLogin } from 'react-google-login';
+import { GoogleLogin } from "react-google-login";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import useStyles from "./styles";
 import Input from "./Input";
+import { signin, signup } from "../../Redux/Auth/actions";
+const initialState = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
 
 const Auth = () => {
   const [isSignup, setIsSignup] = useState(false);
+  const [form, setForm] = useState(initialState);
   const [showPassword, setShowPassword] = useState(false);
   const history = useHistory();
+  const classes = useStyles();
   const dispatch = useDispatch();
+
   const googleSuccess = async (res) => {
     // console.log(res);
     const result = res?.profileObj;
@@ -28,15 +39,17 @@ const Auth = () => {
     try {
       dispatch({ type: "AUTH", payload: { result, token } });
 
-      history.push('/');
+      history.push("/");
     } catch (error) {
       console.log(error);
     }
   };
 
-  const googleError = () => alert('Google Sign In was unsuccessful. Try again later');
+  const googleError = () =>
+    alert("Google Sign In was unsuccessful. Try again later");
 
-  const handleChange = (e) => {};
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
   const handleShowPassword = () => setShowPassword(!showPassword);
 
   const switchMode = () => {
@@ -46,9 +59,13 @@ const Auth = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (isSignup) {
+      dispatch(signup(form, history));
+    } else {
+      dispatch(signin(form, history));
+    }
   };
 
-  const classes = useStyles();
   return (
     <Container component="main" maxWidth="xs">
       <Paper className={classes.paper} elevation={3}>
@@ -111,7 +128,15 @@ const Auth = () => {
           <GoogleLogin
             clientId="713090307597-tsfpoiai4hq01m1t79gjkf708ccnk72g.apps.googleusercontent.com"
             render={(renderProps) => (
-              <Button className={classes.googleButton} color="primary" fullWidth onClick={renderProps.onClick} disabled={renderProps.disabled} startIcon={<Icon />} variant="contained">
+              <Button
+                className={classes.googleButton}
+                color="primary"
+                fullWidth
+                onClick={renderProps.onClick}
+                disabled={renderProps.disabled}
+                startIcon={<Icon />}
+                variant="contained"
+              >
                 Google Sign In
               </Button>
             )}
