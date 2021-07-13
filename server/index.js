@@ -6,8 +6,9 @@ import dotenv from "dotenv";
 import postRoutes from "./routes/posts.js";
 import userRoutes from "./routes/user.js";
 
-const app = express();
 dotenv.config();
+
+const app = express();
 app.use(cors());
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
@@ -15,16 +16,20 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
 
-const CONNECTION_URL = process.env.CONNECTION_URL;
-const port = process.env.PORT || 5000;
-
 app.use("/posts", postRoutes);
 app.use("/user", userRoutes);
-
+app.get("/", (req, res) => {
+  res.send("Hello to Memories API");
+});
 mongoose
-  .connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(process.env.CONNECTION_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() =>
-    app.listen(port, () => console.log(`Server running on port ${port}`))
+    app.listen(process.env.PORT || 5000, "0.0.0.0", () =>
+      console.log(`Server running on port ${port}`)
+    )
   )
   .catch((err) => console.log(err.message));
 
