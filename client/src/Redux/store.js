@@ -16,6 +16,8 @@ const customThunkMiddleware = (store) => (next) => (action) => {
   return next(action);
 };
 
+// or use Thunk middleware directly
+
 export const store = createStore(
   rootReducer,
   compose(

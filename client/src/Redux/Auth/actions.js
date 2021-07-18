@@ -53,9 +53,10 @@ const config = {
 //   return req;
 // });
 
+// https://memoories.herokuapp.com
 export const signin = (formData, router) => async (dispatch) => {
   return axios
-    .post(`http://localhost:5000/user/signin`, formData, config)
+    .post(`http://localhost:5000/posts/user/signin`, formData, config)
     .then((res) => {
       console.log(res.data);
 
@@ -84,7 +85,7 @@ export const signin = (formData, router) => async (dispatch) => {
 //   })
 export const signup = (formData, router) => async (dispatch) => {
   return axios
-    .post("http://localhost:5000/user/signup", formData, config)
+    .post("http://localhost:5000/posts/user/signup", formData, config)
     .then((res) => {
       console.log(res.data);
       dispatch({ type: AUTH, payload: res.data });

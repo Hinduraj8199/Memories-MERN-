@@ -63,6 +63,7 @@ const Post = ({ post, setCurrentId }) => {
         <Typography variant="body2">
           {moment(post.createdAt).calendar()}
         </Typography>
+        {/* moment(post.createdAt).fromNow() */}
       </div>
       {(user?.result?.googleId === post?.creator ||
         user?.result?._id === post?.creator) && (

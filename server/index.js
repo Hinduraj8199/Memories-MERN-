@@ -21,15 +21,16 @@ app.use("/user", userRoutes);
 app.get("/", (req, res) => {
   res.send("Hello to Memories API");
 });
+const CONNECTION_URL = `mongodb://hinduraj:hinduraj123@coursera-shard-00-00.belfw.mongodb.net:27017,coursera-shard-00-01.belfw.mongodb.net:27017,coursera-shard-00-02.belfw.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-te1jey-shard-0&authSource=admin&retryWrites=true&w=majority`;
+const port = process.env.PORT || 5000;
+// "0.0.0.0", add after port line 33
 mongoose
-  .connect(process.env.CONNECTION_URL, {
+  .connect(CONNECTION_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() =>
-    app.listen(process.env.PORT || 5000, "0.0.0.0", () =>
-      console.log(`Server running on port ${port}`)
-    )
+    app.listen(port, () => console.log(`Server running on port ${port}`))
   )
   .catch((err) => console.log(err.message));
 
