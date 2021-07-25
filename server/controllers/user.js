@@ -46,6 +46,8 @@ export const signup = async (req, res) => {
     if (isUserPresent)
       return res.status(400).json({ message: "User already exists" });
 
+    // also check whether password & confirm password is same or not
+
     const hashedPassword = await bcrypt.hash(password, 12);
     console.log(hashedPassword);
     const result = await User.create({

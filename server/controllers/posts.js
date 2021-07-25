@@ -2,11 +2,52 @@ import mongoose from "mongoose";
 import PostMessage from "../models/postMessege.js";
 
 export const getPosts = async (req, res) => {
+  const { page } = req.query;
   try {
-    const posts = await PostMessage.find();
-    res.status(200).json(posts);
+    const limit = 8;
+    const offset = (Number(page) - 1) * limit;
+    const total = await PostMessage.countDocuments({});
+
+    const posts = await PostMessage.find()
+      .sort({ _id: -1 })
+      .limit(limit)
+      .skip(offset);
+    res.status(200).json({
+      data: posts,
+      currentPage: Number(page),
+      totalPages: Math.ceil(total / limit),
+    });
   } catch (err) {
-    res.status(404).json({ messege: err.message });
+    res.status(404).json({ messege: err });
+  }
+};
+
+export const getPost = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const post = await PostMessage.findById(id);
+
+    res.status(200).json(post);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+export const getPostsBySearch = async (req, res) => {
+  const { searchQuery, tags } = req.query;
+  console.log(searchQuery, tags);
+  try {
+    const title = new RegExp(searchQuery, "i");
+
+    const posts = await PostMessage.find({
+      $or: [{ title }, { tags: { $in: tags.split(",") } }],
+    });
+
+    res.json({ data: posts });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: error });
   }
 };
 

@@ -50,6 +50,7 @@ const Auth = () => {
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
+
   const handleShowPassword = () => setShowPassword(!showPassword);
 
   const switchMode = () => {

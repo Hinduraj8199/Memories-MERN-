@@ -16,6 +16,7 @@ import Paginate from "../Pagination/Pagination";
 import { useHistory, useLocation } from "react-router-dom";
 import ChipInput from "material-ui-chip-input";
 import useStyles from "./styles";
+import { fetchpostsBySearch } from "../../Redux/Posts/actions";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -30,14 +31,12 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [tags, setTags] = useState([]);
   const history = useHistory();
-
-  useEffect(() => {
-    dispatch(fetchposts());
-  }, [currentId, dispatch]);
+  console.log("searchQuery" + searchQuery);
+  // when there is no ".../posts?search..." then query / searchQuery = null
 
   const searchPost = () => {
     if (search.trim() || tags) {
-      // dispatch(getPostsBySearch({ search, tags: tags.join(',') }));
+      dispatch(fetchpostsBySearch({ search, tags: tags.join(",") }));
       history.push(
         `/posts/search?searchQuery=${search || "none"}&tags=${tags.join(",")}`
       );
@@ -101,9 +100,15 @@ const Home = () => {
               </Button>
             </AppBar>
             <Form currentId={currentId} setCurrentId={setCurrentId} />
-            <Paginate />
+            {!searchQuery && !tags.length && (
+              <Paper elevation={6}>
+                <Paginate page={page} />
+              </Paper>
+            )}
           </Grid>
         </Grid>
+        <br />
+        <br />
       </Container>
     </Grow>
   );

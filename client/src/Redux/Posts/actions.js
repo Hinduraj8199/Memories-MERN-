@@ -122,6 +122,7 @@
 import axios from "axios";
 import {
   FETCH_DATA_REQUEST,
+  FETCH_BY_SEARCH,
   FETCH_DATA_SUCCESS,
   FETCH_DATA_FAILURE,
   CREATE_POST_REQUEST,
@@ -130,6 +131,7 @@ import {
   UPDATE_POST,
   DELETE_POST,
   LIKE_POST,
+  FETCH_POST,
 } from "./actionTypes";
 
 const API = axios.create({ baseURL: "http://localhost:5000" });
@@ -190,12 +192,44 @@ const config = {
     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
   },
 };
-export const fetchposts = () => (dispatch) => {
+
+export const fetchpost = (id) => (dispatch) => {
   dispatch(fetchPostRequest());
-  return API.get("/posts")
+  return API.get(`/posts/${id}`)
+    .then((res) => {
+      console.log(res);
+      dispatch(dispatch({ type: FETCH_POST, payload: res.data }));
+    })
+    .catch((err) => {
+      dispatch(fetchPostFailure(err));
+      console.log(err);
+    });
+};
+
+export const fetchposts = (page) => (dispatch) => {
+  dispatch(fetchPostRequest());
+  return API.get(`/posts?page=${page}`)
     .then((res) => {
       console.log(res);
       dispatch(fetchPostSuccess(res.data));
+    })
+    .catch((err) => {
+      dispatch(fetchPostFailure(err));
+      console.log(err);
+    });
+};
+
+export const fetchpostsBySearch = (searchQuery) => (dispatch) => {
+  dispatch(fetchPostRequest());
+  console.log(searchQuery);
+  return API.get(
+    `posts/search?searchQuery=${searchQuery.search || "none"}&tags=${
+      searchQuery.tags
+    }`
+  )
+    .then((res) => {
+      console.log(res);
+      dispatch({ type: FETCH_BY_SEARCH, payload: res.data.data });
     })
     .catch((err) => {
       dispatch(fetchPostFailure(err));

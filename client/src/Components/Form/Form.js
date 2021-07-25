@@ -21,6 +21,7 @@ const Form = ({ currentId, setCurrentId }) => {
       ? state.posts.posts.find((message) => message._id === currentId)
       : null
   );
+  // or 1st extract posts from store & then on that posts do .filter to get that particular post to edit
 
   const handleSubmit = (e) => {
     e.preventDefault();
