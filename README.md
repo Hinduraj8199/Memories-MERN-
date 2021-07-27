@@ -1,4 +1,4 @@
-# Coursera Clone (MERN Stack)
+# Social Media Application (MERN Stack)
 
 Memories is Simple social media application that allow users to create
 interesting events . This project includes authentication, pagination, title/tags based searching, client-side routing to post details page.
