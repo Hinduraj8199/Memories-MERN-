@@ -20,7 +20,7 @@ Inside Server Folder :
 Inside Client & Server install with npm
 
 ```bash
-  npm install
+  npm install & npm start 
 ```
 
 ## Screenshots
